@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  # Application Container
+  app:
+    container_name: app
+    hostname: app
+    build:
+      context: ./app/${USE_APP_CONTAINER}
+      args:
+        - TZ=${TZ}
+    networks:
+      laravelnet:
+        ipv4_address: ${APP_IP_ADDRESS}
+    ports:
+      - ${APP_PORT}:8000
+    volumes:
+      - ${SOURCE_PATH}:/var/www/html/
+      - ${PHP_LOG_PATH}:/var/log/php
+    working_dir: /var/www/html/
+    environment:
+      TZ: ${TZ}
+    tty: true
+
+# Network Config
+networks:
+  laravelnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.10.0/16
