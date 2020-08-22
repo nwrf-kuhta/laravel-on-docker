@@ -21,6 +21,29 @@ services:
       TZ: ${TZ}
     tty: true
 
+  # MySQL Container
+  mysql:
+    container_name: mysql
+    hostname: mysql
+    build:
+      context: ./mysql/${USE_MYSQL_CONTAINER}
+    networks:
+      laravelnet:
+        ipv4_address: ${MYSQL_IP_ADDRESS}
+    ports:
+      - ${MYSQL_PORT}:3306
+    volumes:
+      - ./mysql/${USE_MYSQL_CONTAINER}/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/${USE_MYSQL_CONTAINER}/init:/docker-entrypoint-initdb.d/:ro
+      - ./data/mysql:/var/lib/mysql
+      - ./log/mysql:/var/log/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      TZ: ${TZ}
+
 # Network Config
 networks:
   laravelnet:
