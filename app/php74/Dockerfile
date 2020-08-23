@@ -47,6 +47,7 @@ RUN yum -y install \
 # Install PHP.
 RUN yum -y --enablerepo=epel,remi install \
     php74-php \
+    php74-php-fpm \
     php74-php-bcmath \
     php74-php-ctype \
     php74-php-fileinfo \
@@ -65,6 +66,9 @@ RUN yum -y --enablerepo=epel,remi install \
     php74-php-intl \
     php74-php-opcache
 
+# Change php-fpm settings.
+COPY ./php-fpm.d/www.conf /etc/opt/remi/php74/php-fpm.d/www.conf
+
 # Add environment variables for PHP.
 ENV PATH=/opt/remi/php74/root/usr/bin:/opt/remi/php74/root/usr/sbin${PATH:+:${PATH}}
 ENV LD_LIBRARY_PATH=/opt/remi/php74/root/usr/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
@@ -75,3 +79,8 @@ COPY ./php.d/custom-php.ini /etc/opt/remi/php74/php.d/custom-php.ini
 
 # Install composer.
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+# Install the nginx.
+RUN yum -y install nginx
+ENTRYPOINT /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
+EXPOSE 80

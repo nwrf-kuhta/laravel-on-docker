@@ -8,14 +8,19 @@ services:
       context: ./app/${USE_APP_CONTAINER}
       args:
         - TZ=${TZ}
+    privileged: true
+    command: /sbin/init
     networks:
       laravelnet:
         ipv4_address: ${APP_IP_ADDRESS}
     ports:
+      - 80:80
       - ${APP_PORT}:8000
     volumes:
       - ${SOURCE_PATH}:/var/www/html/
       - ${PHP_LOG_PATH}:/var/log/php
+      - ./log/nginx:/var/log/nginx
+      - ./nginx/${USE_NGINX_CONTAINER}/default.conf:/etc/nginx/nginx.conf
     working_dir: /var/www/html/
     environment:
       TZ: ${TZ}
