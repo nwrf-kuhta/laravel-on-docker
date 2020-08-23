@@ -67,7 +67,7 @@ RUN yum -y --enablerepo=epel,remi install \
     php74-php-opcache
 
 # Change php-fpm settings.
-COPY ./php-fpm.d/www.conf /etc/opt/remi/php74/php-fpm.d/www.conf
+COPY ./php/php-fpm.d/www.conf /etc/opt/remi/php74/php-fpm.d/www.conf
 
 # Add environment variables for PHP.
 ENV PATH=/opt/remi/php74/root/usr/bin:/opt/remi/php74/root/usr/sbin${PATH:+:${PATH}}
@@ -75,12 +75,15 @@ ENV LD_LIBRARY_PATH=/opt/remi/php74/root/usr/lib64${LD_LIBRARY_PATH:+:${LD_LIBRA
 ENV MANPATH=/opt/remi/php74/root/usr/share/man:${MANPATH}
 
 # Copy PHP custom settings.
-COPY ./php.d/custom-php.ini /etc/opt/remi/php74/php.d/custom-php.ini
+COPY ./php/php.d/custom-php.ini /etc/opt/remi/php74/php.d/custom-php.ini
 
 # Install composer.
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Install the nginx.
 RUN yum -y install nginx
-ENTRYPOINT /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
-EXPOSE 80
+
+# Start the process.
+COPY ./docker-entrypoint.sh /tmp/docker-entrypoint.sh
+CMD ["/sbin/init"]
+ENTRYPOINT sh /tmp/docker-entrypoint.sh
