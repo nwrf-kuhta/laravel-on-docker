@@ -10,11 +10,12 @@ services:
     command: /sbin/init
     networks:
       laravelnet:
-        ipv4_address: ${WEB_IP}
+        ipv4_address: ${WEB_CONTAINER_IP}
     ports:
-      - 80:80
+      - ${WEB_PORT}:80
+      - ${WEB_SSL_PORT}:443
     volumes:
-      - ${SOURCE_PATH}:/var/www/html/
+      - ${SRC_PATH}:/var/www/html/
       - ./web/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./log/php:/var/log/php
       - ./log/nginx:/var/log/nginx
@@ -28,22 +29,22 @@ services:
     container_name: mysql
     hostname: mysql
     build:
-      context: ./mysql/${USE_MYSQL_CONTAINER}
+      context: ./mysql
     networks:
       laravelnet:
-        ipv4_address: ${MYSQL_IP_ADDRESS}
+        ipv4_address: ${MYSQL_CONTAINER_IP}
     ports:
       - ${MYSQL_PORT}:3306
     volumes:
-      - ./mysql/${USE_MYSQL_CONTAINER}/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./mysql/${USE_MYSQL_CONTAINER}/init:/docker-entrypoint-initdb.d/:ro
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/init:/docker-entrypoint-initdb.d/:ro
       - ./data/mysql:/var/lib/mysql
       - ./log/mysql:/var/log/mysql
     environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB_NAME}
+      MYSQL_USER: ${MYSQL_DB_USER}
+      MYSQL_PASSWORD: ${MYSQL_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_DB_ROOT_PASSWORD}
       TZ: ${TIMEZONE}
 
 # Network Config
@@ -53,4 +54,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.16.10.0/16
+        - subnet: ${NETWORK_SUBNET}

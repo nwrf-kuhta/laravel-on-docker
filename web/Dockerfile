@@ -83,6 +83,12 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 # Install the nginx.
 RUN yum -y install nginx
 
+# Remove MariaDB and Install MySQL.
+RUN yum -y remove mariadb-libs \
+    && rm -rf /var/lib/mysql \
+    && rpm -Uvh http://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm \
+    && yum -y install --enablerepo=mysql57-community mysql-community-client
+
 # Start the process.
 COPY ./docker-entrypoint.sh /tmp/docker-entrypoint.sh
 CMD ["/sbin/init"]

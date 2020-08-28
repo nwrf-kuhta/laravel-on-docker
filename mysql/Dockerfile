@@ -2,7 +2,7 @@ FROM mysql:5.7.31
 LABEL maintainer="nwrf.kuhta <nwrf.kuhta@gmail.com>"
 
 # Copy the my.cnf
-COPY ./my.cnf /etc/my.cnf
+COPY my.cnf /etc/my.cnf
 RUN chmod 644 /etc/my.cnf
 
 # Update apt-get.
