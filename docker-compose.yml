@@ -47,6 +47,23 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_DB_ROOT_PASSWORD}
       TZ: ${TIMEZONE}
 
+  # Redis Container
+  redis:
+    container_name: redis
+    hostname: redis
+    build:
+      context: ./redis
+    networks:
+      laravelnet:
+        ipv4_address: ${REDIS_CONTAINER_IP}
+    ports:
+      - ${REDIS_PORT}:6379
+    volumes:
+      - ./data/redis:/var/lib/redis
+      - ./log/redis:/var/log/redis
+    environment:
+      TZ: ${TIMEZONE}
+
 # Network Config
 networks:
   laravelnet:
