@@ -89,6 +89,9 @@ RUN yum -y remove mariadb-libs \
     && rpm -Uvh http://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm \
     && yum -y install --enablerepo=mysql57-community mysql-community-client
 
+# Instal Redis.
+RUN yum -y --enablerepo=epel install redis
+
 # Start the process.
 COPY ./docker-entrypoint.sh /tmp/docker-entrypoint.sh
 CMD ["/sbin/init"]
