@@ -89,8 +89,16 @@ RUN yum -y remove mariadb-libs \
     && rpm -Uvh http://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm \
     && yum -y install --enablerepo=mysql57-community mysql-community-client
 
-# Instal Redis.
+# Install Redis.
 RUN yum -y --enablerepo=epel install redis
+
+# Install the node.
+RUN curl -O https://rpm.nodesource.com/pub_8.x/el/6/x86_64/nodejs-8.4.0-1nodesource.el6.x86_64.rpm \
+    && rpm -ivhU nodejs-8.4.0-1nodesource.el6.x86_64.rpm
+
+# Install the yarn.
+RUN wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo \
+    && yum -y install yarn
 
 # Start the process.
 COPY ./docker-entrypoint.sh /tmp/docker-entrypoint.sh

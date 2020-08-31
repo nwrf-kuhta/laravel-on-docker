@@ -22,6 +22,9 @@ In addition, the version of each package is as follows.
 | php | 7.4.9 |
 | mysql | 5.7.31 |
 | redis | 6.0.6 |
+| npm | 5.3.0 |
+| node | 8.4.0 |
+| yarn | 1.22.5 |
 
 You can access MySQL and Redis from the web container.
 
@@ -36,7 +39,7 @@ First, clone the repository.
 まずはリポジトリをクローンします。
 
 ```
-git clone https://github.com/nwrf-kuhta/laravel-on-docker
+$ git clone https://github.com/nwrf-kuhta/laravel-on-docker
 ```
 
 Then copy env-testing and create an env file. <br>
@@ -46,7 +49,7 @@ Change the application code path and database settings accordingly.
 アプリケーションコードのパスや、データベースの設定を適宜変更します。
 
 ```
-cp -rp .env-testing .env
+$ cp -rp .env-testing .env
 ```
 
 ### Container construction
@@ -56,7 +59,7 @@ To start the container, execute the following command on the terminal.
 コンテナを起動するにはターミナル上で以下のコマンドを実行します。
 
 ```
-docker-compose up -d --build
+$ docker-compose up -d --build
 ```
 
 After building the container, you can start the armillar by executing the following command.
@@ -64,7 +67,7 @@ After building the container, you can start the armillar by executing the follow
 コンテナ構築後は以下のコマンドを実行することで、渾天を起動することができます。
 
 ```
-docker-compose up -d
+$ docker-compose up -d
 ```
 
 ### Accessing other containers from the web container
@@ -74,7 +77,7 @@ First, access the web container.
 まずはWebコンテナにアクセスします。
 
 ```
-docker-compose exec web bash
+$ docker-compose exec web bash
 ```
 
 You can access MySQL with the following command.
@@ -82,7 +85,7 @@ You can access MySQL with the following command.
 以下のコマンドでMySQLへアクセスできます。
 
 ```
-mysql -hmysql -udeveloper -p
+$ mysql -hmysql -udeveloper -p
 ```
 
 You can also access Redis with the following command.
@@ -90,5 +93,35 @@ You can also access Redis with the following command.
 また、以下のコマンドでRedisへアクセスすることができます。
 
 ```
-redis-cli -h redis
+$ redis-cli -h redis
+```
+
+### Other included packages
+
+#### composer
+
+```
+$ composer --version
+Composer version 1.10.10 2020-08-03 11:35:19
+```
+
+#### npm
+
+```
+$ npm -v
+5.3.0
+```
+
+#### node
+
+```
+$ node -v
+v8.4.0
+```
+
+#### yarn 
+
+```
+$ yarn -v
+1.22.5
 ```
